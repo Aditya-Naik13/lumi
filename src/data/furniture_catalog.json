@@ -1,0 +1,176 @@
+[
+  {
+    "product_id": "VISK-001",
+    "name": "VISKAFORS Armchair",
+    "category": "armchair",
+    "price": 649,
+    "image_url": "https://picsum.photos/seed/visk001/400/400",
+    "thumbnail_url": "https://picsum.photos/seed/visk001/100/100",
+    "aesthetic_tags": ["cozy", "modern", "scandinavian", "warm"],
+    "dimensions": {
+      "width_inches": 52.75,
+      "depth_inches": 35.375,
+      "seat_height_inches": 18.125
+    },
+    "key_features": [
+      "Deep seat perfect for curling up",
+      "High-density foam for long sitting",
+      "10-year warranty"
+    ],
+    "user_friendly_description": "Soft, embracing feel with pocket springs. Built to last with 30,000-cycle fabric testing.",
+    "reviews_summary": "Users love for reading. Common mentions: 'super comfortable', 'great for curling up', 'sturdy quality'",
+    "rating": 4.2
+  },
+  {
+    "product_id": "STRAND-002",
+    "name": "STRANDMON Wing Chair",
+    "category": "armchair",
+    "price": 399,
+    "image_url": "https://picsum.photos/seed/strand002/400/400",
+    "thumbnail_url": "https://picsum.photos/seed/strand002/100/100",
+    "aesthetic_tags": ["traditional", "classic", "cozy", "elegant"],
+    "dimensions": {
+      "width_inches": 32.25,
+      "depth_inches": 37.75,
+      "seat_height_inches": 17.75
+    },
+    "key_features": [
+      "High back provides extra support for your neck",
+      "Classic design from the 1950s",
+      "Easy to keep clean"
+    ],
+    "user_friendly_description": "A timeless piece that offers great comfort and support. Perfect for a traditional reading corner.",
+    "reviews_summary": "Excellent back support. Very stylish and sturdy.",
+    "rating": 4.8
+  },
+  {
+    "product_id": "LAND-003",
+    "name": "LANDSKRONA Sofa",
+    "category": "sofa",
+    "price": 899,
+    "image_url": "https://picsum.photos/seed/land003/400/400",
+    "thumbnail_url": "https://picsum.photos/seed/land003/100/100",
+    "aesthetic_tags": ["modern", "minimalist", "clean", "leather"],
+    "dimensions": {
+      "width_inches": 80.375,
+      "depth_inches": 35,
+      "seat_height_inches": 17.75
+    },
+    "key_features": [
+      "Resilient foam filling",
+      "Tufted seat and back",
+      "Durable leather-like finish"
+    ],
+    "user_friendly_description": "Combines comfort and design with a sleek, modern look. The tufted details add a touch of luxury.",
+    "reviews_summary": "Very easy to assemble. Looks much more expensive than it is.",
+    "rating": 4.5
+  },
+  {
+    "product_id": "LACK-004",
+    "name": "LACK Side Table",
+    "category": "side_table",
+    "price": 15,
+    "image_url": "https://picsum.photos/seed/lack004/400/400",
+    "thumbnail_url": "https://picsum.photos/seed/lack004/100/100",
+    "aesthetic_tags": ["minimalist", "modern", "simple", "lightweight"],
+    "dimensions": {
+      "width_inches": 21.625,
+      "depth_inches": 21.625,
+      "height_inches": 17.75
+    },
+    "key_features": [
+      "Easy to assemble",
+      "Low weight; easy to move",
+      "Matches other products in the LACK series"
+    ],
+    "user_friendly_description": "A simple, functional side table that fits anywhere. Lightweight and easy to move around.",
+    "reviews_summary": "Great value for money. Perfect for small spaces.",
+    "rating": 4.1
+  },
+  {
+    "product_id": "HEM-005",
+    "name": "HEMNES Coffee Table",
+    "category": "side_table",
+    "price": 149,
+    "image_url": "https://picsum.photos/seed/hem005/400/400",
+    "thumbnail_url": "https://picsum.photos/seed/hem005/100/100",
+    "aesthetic_tags": ["traditional", "rustic", "wood", "warm"],
+    "dimensions": {
+      "width_inches": 35.375,
+      "depth_inches": 35.375,
+      "height_inches": 18.125
+    },
+    "key_features": [
+      "Solid wood has a natural feel",
+      "Separate shelf for magazines",
+      "Durable and easy to clean"
+    ],
+    "user_friendly_description": "A sturdy coffee table made of solid wood. The shelf underneath keeps your living room tidy.",
+    "reviews_summary": "Beautiful wood finish. Very solid and well-made.",
+    "rating": 4.6
+  },
+  {
+    "product_id": "RAN-006",
+    "name": "RANARP Floor Lamp",
+    "category": "floor_lamp",
+    "price": 59,
+    "image_url": "https://picsum.photos/seed/ran006/400/400",
+    "thumbnail_url": "https://picsum.photos/seed/ran006/100/100",
+    "aesthetic_tags": ["industrial", "vintage", "metal", "black"],
+    "dimensions": {
+      "height_inches": 60,
+      "base_diameter_inches": 11
+    },
+    "key_features": [
+      "Adjustable arm and head",
+      "Directed light for reading",
+      "Heavy base for stability"
+    ],
+    "user_friendly_description": "An industrial-style lamp that provides excellent directed light. Perfect for reading or working.",
+    "reviews_summary": "Looks great in my home office. Very sturdy and adjustable.",
+    "rating": 4.7
+  },
+  {
+    "product_id": "NYM-007",
+    "name": "NYMÖ Lamp Shade",
+    "category": "floor_lamp",
+    "price": 35,
+    "image_url": "https://picsum.photos/seed/nym007/400/400",
+    "thumbnail_url": "https://picsum.photos/seed/nym007/100/100",
+    "aesthetic_tags": ["boho", "chic", "patterned", "warm"],
+    "dimensions": {
+      "diameter_inches": 15,
+      "height_inches": 10
+    },
+    "key_features": [
+      "Perforated shade creates decorative light patterns",
+      "Soft, warm glow",
+      "Easy to attach to lamp base"
+    ],
+    "user_friendly_description": "Creates a cozy atmosphere with beautiful light patterns. The copper interior adds a warm glow.",
+    "reviews_summary": "Absolutely beautiful. The light patterns it makes are stunning.",
+    "rating": 4.9
+  },
+  {
+    "product_id": "MALM-008",
+    "name": "MALM Desk",
+    "category": "desk",
+    "price": 179,
+    "image_url": "https://picsum.photos/seed/malm008/400/400",
+    "thumbnail_url": "https://picsum.photos/seed/malm008/100/100",
+    "aesthetic_tags": ["modern", "minimalist", "clean", "white"],
+    "dimensions": {
+      "width_inches": 55.125,
+      "depth_inches": 25.625,
+      "height_inches": 28.75
+    },
+    "key_features": [
+      "Built-in cable management",
+      "Finished back; can be placed in the middle of a room",
+      "Clean lines"
+    ],
+    "user_friendly_description": "A sleek desk with a clean design. The cable shelf keeps wires out of sight but close at hand.",
+    "reviews_summary": "Perfect for my home office. Very easy to keep organized.",
+    "rating": 4.4
+  }
+]
