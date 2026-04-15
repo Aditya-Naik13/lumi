@@ -4,9 +4,13 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { GoogleGenAI, Type, GenerateContentResponse } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 import { motion, AnimatePresence } from 'motion/react';
+<<<<<<< Updated upstream
 import { Send, Sparkles, ChevronRight, Info, Star, X } from 'lucide-react';
+=======
+import { Send, Sparkles, Info, Star, X } from 'lucide-react';
+>>>>>>> Stashed changes
 import catalogData from './data/furniture_catalog.json';
 
 // --- Types ---
@@ -33,17 +37,14 @@ interface Message {
   content: string;
   timestamp: string;
   quickReplies?: string[];
-  products?: any[]; // Products recommended in this specific turn
+  products?: any[];
 }
 
 interface ConversationContext {
   intent: string | null;
   room: string | null;
   space: string | null;
-  budget: {
-    min: number | null;
-    max: number | null;
-  };
+  budget: { min: number | null; max: number | null };
   aesthetic: string[];
   product_type: string | null;
 }
@@ -58,6 +59,7 @@ interface ConversationState {
 
 // --- Constants ---
 
+<<<<<<< Updated upstream
 const COLORS = {
   bg: '#FAFAFA',
   text: '#111111',
@@ -70,6 +72,8 @@ const COLORS = {
   surface: '#FFFFFF',
 };
 
+=======
+>>>>>>> Stashed changes
 const SYSTEM_INSTRUCTION = `You are Lumi, a furniture discovery assistant. Your job is to refine fuzzy goals through efficient conversation.
 
 CRITICAL RULE: NEVER ask the same question twice. Track what you know.
@@ -161,6 +165,7 @@ MATCH REASONS MUST:
 
 // --- Components ---
 
+<<<<<<< Updated upstream
 const QuickReplies = ({ options, onSelect }: { options: string[]; onSelect: (option: string) => void }) => {
   return (
     <motion.div
@@ -186,16 +191,44 @@ const QuickReplies = ({ options, onSelect }: { options: string[]; onSelect: (opt
 };
 
 // Mobile inline product card (compact)
+=======
+const QuickReplies = ({ options, onSelect }: { options: string[]; onSelect: (option: string) => void }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 8 }}
+    animate={{ opacity: 1, y: 0 }}
+    className="flex flex-col gap-2.5 px-5 py-3.5 bg-white/55 backdrop-blur-xl border-t border-white/60"
+  >
+    <p className="text-[9px] uppercase tracking-[0.15em] text-[#94A3B8] font-semibold">Suggestions</p>
+    <div className="flex flex-wrap gap-2">
+      {options.map((option, i) => (
+        <button
+          key={i}
+          onClick={() => onSelect(option)}
+          className="px-4 py-1.5 bg-white/80 border border-[#2D5B7B]/15 text-[#2D5B7B] rounded-full text-xs font-medium tracking-tight hover:bg-[#2D5B7B] hover:text-white hover:border-[#2D5B7B] transition-all duration-200"
+        >
+          {option}
+        </button>
+      ))}
+    </div>
+  </motion.div>
+);
+
+>>>>>>> Stashed changes
 const ProductCard = ({
   product,
   recommendation,
   onSelect,
+<<<<<<< Updated upstream
   onDetails
+=======
+  onDetails,
+>>>>>>> Stashed changes
 }: {
   product: Product;
   recommendation: any;
   onSelect: (name: string) => void;
   onDetails: (product: Product) => void;
+<<<<<<< Updated upstream
   key?: React.Key;
 }) => {
   return (
@@ -246,11 +279,64 @@ const ProductCard = ({
             Details
           </button>
         </div>
+=======
+}) => (
+  <motion.div
+    initial={{ opacity: 0, y: 12, scale: 0.97 }}
+    animate={{ opacity: 1, y: 0, scale: 1 }}
+    transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+    className="flex-shrink-0 w-[255px] bg-white/75 backdrop-blur-xl rounded-3xl border border-white/80 overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.07)] mr-3 flex flex-col"
+  >
+    <div className="relative group">
+      <img
+        src={product.image_url}
+        alt={product.name}
+        className="w-full h-[210px] object-cover"
+        referrerPolicy="no-referrer"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+        <button
+          onClick={() => onDetails(product)}
+          className="p-2.5 bg-white/90 backdrop-blur-sm rounded-full text-[#1C1C2E] hover:bg-white transition-colors shadow-sm"
+        >
+          <Info size={15} />
+        </button>
       </div>
-    </motion.div>
-  );
-};
+    </div>
+    <div className="p-4 flex-1 flex flex-col gap-2">
+      <div className="flex justify-between items-start gap-2">
+        <h3 className="font-semibold text-sm text-[#1C1C2E] tracking-tight leading-snug line-clamp-1 flex-1">
+          {product.name}
+        </h3>
+        <span className="font-semibold text-sm text-[#2D5B7B] flex-shrink-0">${product.price}</span>
+>>>>>>> Stashed changes
+      </div>
+      <div className="flex items-center gap-1">
+        <Star size={11} className="text-[#D4A574]" fill="currentColor" />
+        <span className="text-[11px] font-medium text-[#94A3B8] tracking-tight">{product.rating}</span>
+      </div>
+      <p className="text-[11px] text-[#94A3B8] line-clamp-2 italic leading-relaxed tracking-tight">
+        "{recommendation.match_reason}"
+      </p>
+      <div className="mt-auto flex gap-2 pt-2">
+        <button
+          onClick={() => onSelect(product.name)}
+          className="flex-1 py-2 bg-[#2D5B7B] text-white rounded-xl text-xs font-medium tracking-tight hover:bg-[#1E3D51] transition-colors"
+        >
+          Select
+        </button>
+        <button
+          onClick={() => onDetails(product)}
+          className="px-3 py-2 bg-white/60 border border-white/80 text-[#64748B] rounded-xl text-xs font-medium tracking-tight hover:bg-white/90 transition-colors"
+        >
+          Details
+        </button>
+      </div>
+    </div>
+  </motion.div>
+);
 
+<<<<<<< Updated upstream
 // Desktop gallery card (larger, showroom feel)
 const GalleryCard = ({
   product,
@@ -374,10 +460,17 @@ const AssistantReply = ({
   message,
   onSelectProduct,
   onViewDetails
+=======
+const AssistantReply = ({
+  message,
+  onSelectProduct,
+  onViewDetails,
+>>>>>>> Stashed changes
 }: {
   message: Message;
   onSelectProduct: (name: string) => void;
   onViewDetails: (product: Product) => void;
+<<<<<<< Updated upstream
   key?: React.Key;
 }) => {
   return (
@@ -414,6 +507,41 @@ const AssistantReply = ({
     </div>
   );
 };
+=======
+}) => (
+  <div className="flex flex-col w-full mb-5">
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.25 }}
+      className="flex justify-start mb-3"
+    >
+      <div className="max-w-[82%] px-4 py-3 rounded-2xl rounded-tl-none bg-white/70 backdrop-blur-xl border border-white/75 shadow-[0_2px_16px_rgba(0,0,0,0.05)] text-sm leading-relaxed tracking-tight text-[#1C1C2E]">
+        {message.content}
+      </div>
+    </motion.div>
+
+    {message.products && message.products.length > 0 && (
+      <div className="w-full overflow-x-auto no-scrollbar py-1 -mx-4 px-4 flex snap-x">
+        {message.products.map((rec) => {
+          const product = catalogData.find(p => p.product_id === rec.product_id);
+          if (!product) return null;
+          return (
+            <ProductCard
+              key={product.product_id}
+              product={product as Product}
+              recommendation={rec}
+              onSelect={onSelectProduct}
+              onDetails={onViewDetails}
+            />
+          );
+        })}
+        <div className="flex-shrink-0 w-4" />
+      </div>
+    )}
+  </div>
+);
+>>>>>>> Stashed changes
 
 // --- Main App ---
 
@@ -449,10 +577,7 @@ export default function App() {
   useEffect(() => {
     if (scrollRef.current) {
       setTimeout(() => {
-        scrollRef.current?.scrollTo({
-          top: scrollRef.current.scrollHeight,
-          behavior: 'smooth'
-        });
+        scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
       }, 100);
     }
   }, [state.history, isTyping, state.products_shown]);
@@ -484,16 +609,18 @@ export default function App() {
     setIsTyping(true);
 
     try {
-      // 1. Extract context
       const extractionResponse = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.0-flash",
         contents: EXTRACTION_PROMPT(textToSend, JSON.stringify(state.context)),
         config: { responseMimeType: "application/json" },
       });
 
       const extractedContext = JSON.parse(extractionResponse.text || '{}');
+<<<<<<< Updated upstream
 
       // Merge context
+=======
+>>>>>>> Stashed changes
       const updatedContext = {
         ...state.context,
         ...extractedContext,
@@ -504,16 +631,12 @@ export default function App() {
         aesthetic: Array.from(new Set([...state.context.aesthetic, ...(extractedContext.aesthetic || [])])),
       };
 
-      // 2. Determine Stage Transition
       let nextStage = state.stage;
-      if (state.stage === 'broad' && updatedContext.intent) {
-        nextStage = 'contextual';
-      } else if (state.stage === 'contextual' && (updatedContext.room || updatedContext.space)) {
-        nextStage = 'preferences';
-      } else if (state.stage === 'preferences' && updatedContext.budget.max && updatedContext.aesthetic.length > 0) {
-        nextStage = 'specific';
-      }
+      if (state.stage === 'broad' && updatedContext.intent) nextStage = 'contextual';
+      else if (state.stage === 'contextual' && (updatedContext.room || updatedContext.space)) nextStage = 'preferences';
+      else if (state.stage === 'preferences' && updatedContext.budget.max && updatedContext.aesthetic.length > 0) nextStage = 'specific';
 
+<<<<<<< Updated upstream
       // Handle "you decide"
       if (extractedContext.user_said_you_decide && updatedContext.intent && updatedContext.aesthetic.length > 0) {
         if (!updatedContext.budget.max) {
@@ -522,12 +645,14 @@ export default function App() {
       }
 
       // 3. Check for Visual Trigger
+=======
+>>>>>>> Stashed changes
       let productsForThisTurn: any[] = [];
       let productsShown = state.products_shown;
 
       if (nextStage === 'specific' && !state.products_shown) {
         const recommendationResponse = await ai.models.generateContent({
-          model: "gemini-3-flash-preview",
+          model: "gemini-2.0-flash",
           contents: RECOMMENDATION_PROMPT(updatedContext, catalogData),
           config: { responseMimeType: "application/json" },
         });
@@ -536,21 +661,20 @@ export default function App() {
         productsShown = true;
       }
 
-      // 4. Generate Conversational Response
       const chat = ai.chats.create({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.0-flash",
         config: {
           systemInstruction: `${SYSTEM_INSTRUCTION}\n\nWhat you know so far:\n${JSON.stringify(updatedContext, null, 2)}`,
         },
       });
 
-      const response = await chat.sendMessage({
-        message: textToSend,
-      });
-
+      const response = await chat.sendMessage({ message: textToSend });
       let rawContent = response.text || "I'm sorry, I didn't quite catch that. Could you say it again?";
 
+<<<<<<< Updated upstream
       // Parse Quick Replies: [Option 1 | Option 2]
+=======
+>>>>>>> Stashed changes
       let quickReplies: string[] = [];
       const qrMatch = rawContent.match(/\[(.*?)\]/);
       if (qrMatch) {
@@ -573,20 +697,25 @@ export default function App() {
         products_shown: productsShown,
         history: [...newHistory, assistantMessage],
       }));
-
     } catch (error) {
       console.error("Error in Lumi:", error);
-      const errorMessage: Message = {
-        role: 'assistant',
-        content: "I'm having a little trouble connecting right now. Could you try again in a moment?",
-        timestamp: new Date().toISOString(),
-      };
-      setState((prev) => ({ ...prev, history: [...prev.history, errorMessage] }));
+      setState((prev) => ({
+        ...prev,
+        history: [
+          ...prev.history,
+          {
+            role: 'assistant',
+            content: "I'm having a little trouble connecting right now. Could you try again in a moment?",
+            timestamp: new Date().toISOString(),
+          },
+        ],
+      }));
     } finally {
       setIsTyping(false);
     }
   };
 
+<<<<<<< Updated upstream
   const lastMessage = state.history[state.history.length - 1];
   const showQuickReplies = lastMessage?.role === 'assistant' && lastMessage?.quickReplies;
 
@@ -608,6 +737,96 @@ export default function App() {
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-[#0058A3] flex items-center justify-center flex-shrink-0">
               <Sparkles size={16} className="text-white" />
+=======
+  const lastMsg = state.history[state.history.length - 1];
+  const showQuickReplies = lastMsg?.role === 'assistant' && lastMsg?.quickReplies;
+
+  return (
+    <div
+      className="flex flex-col h-screen overflow-hidden text-[#1C1C2E]"
+      style={{ fontFamily: "'Space Grotesk', system-ui, sans-serif" }}
+    >
+      {/* Ambient background */}
+      <div className="fixed inset-0 -z-10">
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(135deg, #EEF3F9 0%, #FBF8F4 55%, #F4EEF9 100%)' }}
+        />
+        <div
+          className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full opacity-50"
+          style={{ background: 'radial-gradient(circle, #C8DDEF 0%, transparent 70%)', filter: 'blur(72px)' }}
+        />
+        <div
+          className="absolute -bottom-16 -right-16 w-[420px] h-[420px] rounded-full opacity-35"
+          style={{ background: 'radial-gradient(circle, #EDD5B8 0%, transparent 70%)', filter: 'blur(72px)' }}
+        />
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] h-[380px] rounded-full opacity-20"
+          style={{ background: 'radial-gradient(circle, #D5C8EF 0%, transparent 70%)', filter: 'blur(72px)' }}
+        />
+      </div>
+
+      {/* Header */}
+      <header className="flex items-center justify-between px-5 py-3.5 bg-white/60 backdrop-blur-2xl border-b border-white/60 z-10">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 bg-[#2D5B7B] rounded-xl flex items-center justify-center text-white">
+            <Sparkles size={14} />
+          </div>
+          <div>
+            <h1 className="text-base font-semibold tracking-tight leading-none">Lumi</h1>
+            <p className="text-[9px] uppercase tracking-[0.14em] text-[#94A3B8] font-medium mt-0.5">
+              {state.stage}
+            </p>
+          </div>
+        </div>
+        <button className="p-2 text-[#94A3B8] hover:bg-white/60 rounded-full transition-colors">
+          <Info size={18} />
+        </button>
+      </header>
+
+      {/* Chat Area */}
+      <main ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-6 scroll-smooth">
+        <AnimatePresence initial={false}>
+          {state.history.map((msg, i) =>
+            msg.role === 'assistant' ? (
+              <AssistantReply
+                key={i}
+                message={msg}
+                onSelectProduct={(name) => handleSend(`I'd like to select the ${name}`)}
+                onViewDetails={(p) => setSelectedProduct(p)}
+              />
+            ) : (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: 8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.2 }}
+                className="flex justify-end mb-5"
+              >
+                <div className="max-w-[75%] px-4 py-3 rounded-2xl rounded-tr-none bg-[#2D5B7B]/10 border border-[#2D5B7B]/10 text-sm leading-relaxed tracking-tight text-[#1C1C2E]">
+                  {msg.content}
+                </div>
+              </motion.div>
+            )
+          )}
+        </AnimatePresence>
+
+        {isTyping && (
+          <motion.div
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex justify-start mb-5"
+          >
+            <div className="px-4 py-3.5 rounded-2xl rounded-tl-none bg-white/70 backdrop-blur-xl border border-white/75 shadow-[0_2px_16px_rgba(0,0,0,0.05)] flex gap-1.5 items-center">
+              {[0, 0.15, 0.3].map((delay, i) => (
+                <motion.div
+                  key={i}
+                  animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1, 0.8] }}
+                  transition={{ repeat: Infinity, duration: 1.1, delay, ease: 'easeInOut' }}
+                  className="w-1.5 h-1.5 bg-[#2D5B7B]/50 rounded-full"
+                />
+              ))}
+>>>>>>> Stashed changes
             </div>
             <div>
               <h1 className="text-base font-bold tracking-tight text-[#111111] leading-none">Lumi</h1>
@@ -721,6 +940,7 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+<<<<<<< Updated upstream
             className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center p-4"
             onClick={() => setSelectedProduct(null)}
           >
@@ -730,6 +950,17 @@ export default function App() {
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
               className="bg-white w-full max-w-lg overflow-hidden shadow-2xl rounded"
+=======
+            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4"
+            onClick={() => setSelectedProduct(null)}
+          >
+            <motion.div
+              initial={{ y: '100%', opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: '100%', opacity: 0 }}
+              transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="bg-white/88 backdrop-blur-2xl w-full max-w-lg rounded-t-[2rem] sm:rounded-[2rem] overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.12)] border border-white/80"
+>>>>>>> Stashed changes
               onClick={(e) => e.stopPropagation()}
             >
               <div className="relative h-64 sm:h-72">
@@ -739,16 +970,26 @@ export default function App() {
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
                 />
+<<<<<<< Updated upstream
                 <button
                   onClick={() => setSelectedProduct(null)}
                   className="absolute top-3 right-3 w-8 h-8 bg-white/90 text-[#111111] flex items-center justify-center hover:bg-white transition-colors shadow-sm"
                 >
                   <X size={16} />
+=======
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                <button
+                  onClick={() => setSelectedProduct(null)}
+                  className="absolute top-4 right-4 w-8 h-8 bg-white/80 backdrop-blur-sm text-[#1C1C2E] rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-sm"
+                >
+                  <X size={14} />
+>>>>>>> Stashed changes
                 </button>
               </div>
               <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
+                <div className="flex justify-between items-start mb-5">
                   <div>
+<<<<<<< Updated upstream
                     <h2 className="text-xl font-bold text-[#111111] leading-tight">{selectedProduct.name}</h2>
                     <p className="text-xs text-[#767676] uppercase tracking-wider mt-1">{selectedProduct.category}</p>
                   </div>
@@ -757,12 +998,29 @@ export default function App() {
                     <div className="flex items-center justify-end gap-1 mt-0.5">
                       <Star size={12} fill="currentColor" className="text-[#FFDB00]" />
                       <span className="text-sm text-[#767676] font-medium">{selectedProduct.rating}</span>
+=======
+                    <h2 className="text-xl font-semibold tracking-tight text-[#1C1C2E]">
+                      {selectedProduct.name}
+                    </h2>
+                    <p className="text-[9px] uppercase tracking-[0.14em] text-[#94A3B8] font-medium mt-1">
+                      {selectedProduct.category}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xl font-semibold tracking-tight text-[#2D5B7B]">
+                      ${selectedProduct.price}
+                    </p>
+                    <div className="flex items-center justify-end gap-1 mt-1">
+                      <Star size={12} className="text-[#D4A574]" fill="currentColor" />
+                      <span className="text-xs font-medium text-[#94A3B8]">{selectedProduct.rating}</span>
+>>>>>>> Stashed changes
                     </div>
                   </div>
                 </div>
 
                 <div className="space-y-4 mb-6">
                   <div>
+<<<<<<< Updated upstream
                     <h4 className="text-[10px] font-bold uppercase text-[#999999] tracking-widest mb-2">Description</h4>
                     <p className="text-sm text-[#444444] leading-relaxed">{selectedProduct.user_friendly_description}</p>
                   </div>
@@ -772,6 +1030,23 @@ export default function App() {
                       {selectedProduct.key_features.map((f, i) => (
                         <li key={i} className="text-sm text-[#444444] flex items-center gap-2">
                           <div className="w-1 h-1 bg-[#0058A3] rounded-full flex-shrink-0" />
+=======
+                    <h4 className="text-[9px] font-semibold uppercase tracking-[0.14em] text-[#94A3B8] mb-2">
+                      Description
+                    </h4>
+                    <p className="text-sm text-[#475569] leading-relaxed tracking-tight">
+                      {selectedProduct.user_friendly_description}
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="text-[9px] font-semibold uppercase tracking-[0.14em] text-[#94A3B8] mb-2">
+                      Key Features
+                    </h4>
+                    <ul className="space-y-1.5">
+                      {selectedProduct.key_features.map((f, i) => (
+                        <li key={i} className="text-sm text-[#475569] tracking-tight flex items-center gap-2.5">
+                          <div className="w-1 h-1 rounded-full bg-[#D4A574] flex-shrink-0" />
+>>>>>>> Stashed changes
                           {f}
                         </li>
                       ))}
@@ -784,7 +1059,11 @@ export default function App() {
                     handleSend(`I've decided on the ${selectedProduct.name}!`);
                     setSelectedProduct(null);
                   }}
+<<<<<<< Updated upstream
                   className="w-full py-3.5 bg-[#0058A3] text-white font-bold hover:bg-[#004F99] transition-colors text-sm uppercase tracking-wider rounded"
+=======
+                  className="w-full py-3.5 bg-[#2D5B7B] text-white rounded-2xl font-medium tracking-tight hover:bg-[#1E3D51] transition-colors"
+>>>>>>> Stashed changes
                 >
                   Select This Product
                 </button>
@@ -794,6 +1073,44 @@ export default function App() {
         )}
       </AnimatePresence>
 
+<<<<<<< Updated upstream
+=======
+      {/* Quick Replies */}
+      {showQuickReplies && (
+        <QuickReplies options={lastMsg.quickReplies!} onSelect={(option) => handleSend(option)} />
+      )}
+
+      {/* Input Area */}
+      <footer className="px-4 py-3 bg-white/55 backdrop-blur-2xl border-t border-white/60">
+        <div className="max-w-3xl mx-auto flex items-center gap-3">
+          <div className="flex-1 relative">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+              placeholder="Describe your dream space..."
+              className="w-full h-11 pl-4 pr-12 bg-white/70 border border-white/80 rounded-2xl text-sm tracking-tight placeholder-[#94A3B8] focus:ring-2 focus:ring-[#2D5B7B]/15 focus:outline-none focus:border-[#2D5B7B]/25 transition-all"
+            />
+            <button
+              onClick={() => handleSend()}
+              disabled={!input.trim() || isTyping}
+              className={`absolute right-1.5 top-1.5 w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-200 ${
+                input.trim() && !isTyping
+                  ? 'bg-[#2D5B7B] text-white shadow-sm'
+                  : 'bg-[#E2E8F0] text-[#94A3B8]'
+              }`}
+            >
+              <Send size={15} />
+            </button>
+          </div>
+        </div>
+        <p className="text-[9px] text-center tracking-[0.12em] uppercase text-[#CBD5E1] mt-2.5 font-medium">
+          Powered by Gemini
+        </p>
+      </footer>
+
+>>>>>>> Stashed changes
       <style>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
