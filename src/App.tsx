@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenAI, Type, GenerateContentResponse } from "@google/genai";
 import { motion, AnimatePresence } from 'motion/react';
-import { Send, User, Sparkles, ChevronRight, Info, Star } from 'lucide-react';
+import { Send, Sparkles, ChevronRight, Info, Star, X } from 'lucide-react';
 import catalogData from './data/furniture_catalog.json';
 
 // --- Types ---
@@ -59,14 +59,15 @@ interface ConversationState {
 // --- Constants ---
 
 const COLORS = {
-  bg: '#FFFFFF',
-  text: '#1A1A1A',
-  userBubble: '#F0F0F0',
-  assistantBubble: '#E8F4F8',
-  accentPrimary: '#2D5B7B',
-  accentSecondary: '#D4A574',
+  bg: '#FAFAFA',
+  text: '#111111',
+  textSecondary: '#767676',
+  userBubble: '#EBEBEB',
+  assistantBubble: '#FFFFFF',
+  accentPrimary: '#0058A3',
+  accentYellow: '#FFDB00',
   border: '#E0E0E0',
-  buttonPrimary: '#2D5B7B',
+  surface: '#FFFFFF',
 };
 
 const SYSTEM_INSTRUCTION = `You are Lumi, a furniture discovery assistant. Your job is to refine fuzzy goals through efficient conversation.
@@ -162,20 +163,20 @@ MATCH REASONS MUST:
 
 const QuickReplies = ({ options, onSelect }: { options: string[]; onSelect: (option: string) => void }) => {
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 10 }}
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex flex-col gap-2 p-4 bg-white border-t border-[#E0E0E0] shadow-[0_-4px_12px_rgba(0,0,0,0.05)]"
+      className="flex flex-col gap-2 px-4 py-3 bg-white border-t border-[#E0E0E0]"
     >
-      <p className="text-[10px] uppercase tracking-widest text-[#666] font-semibold mb-1">Suggestions</p>
+      <p className="text-[10px] uppercase tracking-widest text-[#767676] font-semibold">Suggestions</p>
       <div className="flex flex-wrap gap-2">
         {options.map((option, i) => (
           <button
             key={i}
             onClick={() => onSelect(option)}
-            className="px-4 py-2 bg-[#F8FAFC] border border-[#E2E8F0] text-[#2D5B7B] rounded-xl text-xs font-medium hover:bg-[#2D5B7B] hover:text-white hover:border-[#2D5B7B] transition-all shadow-sm flex items-center gap-2"
+            className="px-3 py-1.5 bg-white border border-[#0058A3] text-[#0058A3] rounded text-xs font-medium hover:bg-[#0058A3] hover:text-white transition-colors flex items-center gap-1.5"
           >
-            <ChevronRight size={12} />
+            <ChevronRight size={11} />
             {option}
           </button>
         ))}
@@ -184,62 +185,63 @@ const QuickReplies = ({ options, onSelect }: { options: string[]; onSelect: (opt
   );
 };
 
-const ProductCard = ({ 
-  product, 
-  recommendation, 
-  onSelect, 
-  onDetails 
-}: { 
-  product: Product; 
-  recommendation: any; 
+// Mobile inline product card (compact)
+const ProductCard = ({
+  product,
+  recommendation,
+  onSelect,
+  onDetails
+}: {
+  product: Product;
+  recommendation: any;
   onSelect: (name: string) => void;
   onDetails: (product: Product) => void;
   key?: React.Key;
 }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
+      initial={{ opacity: 0, scale: 0.97 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="flex-shrink-0 w-[280px] bg-white rounded-2xl border border-[#E0E0E0] overflow-hidden shadow-sm mr-4 flex flex-col"
+      className="flex-shrink-0 w-[220px] bg-white border border-[#E0E0E0] overflow-hidden mr-3 flex flex-col rounded"
     >
       <div className="relative group">
         <img
           src={product.image_url}
           alt={product.name}
-          className="w-full h-[240px] object-cover"
+          className="w-full h-[150px] object-cover"
           referrerPolicy="no-referrer"
         />
-        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-          <button 
+        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+          <button
             onClick={() => onDetails(product)}
-            className="p-2 bg-white rounded-full text-[#1A1A1A] hover:bg-[#F0F0F0] transition-colors"
+            className="p-1.5 bg-white text-[#111111] hover:bg-[#F5F5F5] transition-colors"
           >
-            <Info size={18} />
+            <Info size={16} />
           </button>
         </div>
       </div>
-      <div className="p-4 flex-1 flex flex-col">
-        <div className="flex justify-between items-start mb-1">
-          <h3 className="font-semibold text-base text-[#1A1A1A] line-clamp-1">{product.name}</h3>
-          <span className="font-bold text-[#2D5B7B]">${product.price}</span>
+      <div className="p-3 flex-1 flex flex-col">
+        <div className="flex justify-between items-start mb-1 gap-2">
+          <h3 className="font-bold text-sm text-[#111111] line-clamp-1 flex-1 leading-tight">{product.name}</h3>
+          <span className="font-bold text-sm text-[#0058A3] flex-shrink-0">${product.price}</span>
         </div>
-        <div className="flex items-center gap-1 mb-2 text-xs text-amber-500">
-          <Star size={12} fill="currentColor" />
-          <span className="font-medium">{product.rating}</span>
+        <div className="flex items-center gap-1 mb-2">
+          <Star size={10} fill="currentColor" className="text-[#FFDB00]" />
+          <span className="text-xs text-[#767676]">{product.rating}</span>
         </div>
-        <p className="text-xs text-[#666] mb-4 line-clamp-2 italic leading-relaxed">
-          "{recommendation.match_reason}"
+        <p className="text-xs text-[#555555] mb-3 line-clamp-2 leading-relaxed">
+          {recommendation.match_reason}
         </p>
-        <div className="mt-auto flex gap-2">
+        <div className="mt-auto flex gap-1.5">
           <button
             onClick={() => onSelect(product.name)}
-            className="flex-1 py-2 bg-[#2D5B7B] text-white rounded-xl text-xs font-medium hover:bg-[#1E3D51] transition-colors"
+            className="flex-1 py-1.5 bg-[#0058A3] text-white rounded text-xs font-semibold hover:bg-[#004F99] transition-colors"
           >
             Select
           </button>
           <button
             onClick={() => onDetails(product)}
-            className="px-3 py-2 border border-[#E0E0E0] text-[#666] rounded-xl text-xs font-medium hover:bg-[#F0F0F0] transition-colors"
+            className="px-2 py-1.5 border border-[#E0E0E0] text-[#767676] rounded text-xs hover:bg-[#F5F5F5] transition-colors"
           >
             Details
           </button>
@@ -249,38 +251,158 @@ const ProductCard = ({
   );
 };
 
-const AssistantReply = ({ 
-  message, 
-  onSelectProduct, 
-  onViewDetails 
-}: { 
-  message: Message; 
+// Desktop gallery card (larger, showroom feel)
+const GalleryCard = ({
+  product,
+  recommendation,
+  onSelect,
+  onDetails
+}: {
+  product: Product;
+  recommendation: any;
+  onSelect: (name: string) => void;
+  onDetails: (product: Product) => void;
+  key?: React.Key;
+}) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-white border border-[#E0E0E0] overflow-hidden flex flex-col group rounded"
+    >
+      <div className="relative overflow-hidden">
+        <img
+          src={product.image_url}
+          alt={product.name}
+          className="w-full aspect-square object-cover group-hover:scale-103 transition-transform duration-500"
+          referrerPolicy="no-referrer"
+        />
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+        <button
+          onClick={() => onDetails(product)}
+          className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity bg-white p-1.5 shadow-sm hover:bg-[#F5F5F5]"
+        >
+          <Info size={14} className="text-[#111111]" />
+        </button>
+      </div>
+      <div className="p-4 flex-1 flex flex-col">
+        <div className="flex justify-between items-start gap-2 mb-1">
+          <h3 className="font-bold text-sm text-[#111111] leading-tight line-clamp-2 flex-1">{product.name}</h3>
+          <span className="font-bold text-sm text-[#0058A3] flex-shrink-0">${product.price}</span>
+        </div>
+        <div className="flex items-center gap-1.5 mb-2">
+          <Star size={11} fill="currentColor" className="text-[#FFDB00]" />
+          <span className="text-xs text-[#767676]">{product.rating}</span>
+          <span className="text-[#DFDFDF] mx-0.5">·</span>
+          <span className="text-[10px] uppercase tracking-wider text-[#767676]">{product.category}</span>
+        </div>
+        <p className="text-xs text-[#555555] mb-4 leading-relaxed line-clamp-2">
+          {recommendation.match_reason}
+        </p>
+        <div className="mt-auto flex gap-2">
+          <button
+            onClick={() => onSelect(product.name)}
+            className="flex-1 py-2 bg-[#0058A3] text-white text-xs font-bold hover:bg-[#004F99] transition-colors uppercase tracking-wider rounded"
+          >
+            Select
+          </button>
+          <button
+            onClick={() => onDetails(product)}
+            className="px-3 py-2 border border-[#E0E0E0] text-[#767676] text-xs hover:bg-[#F5F5F5] transition-colors rounded"
+          >
+            Details
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+// Desktop left gallery panel
+const GalleryPanel = ({
+  allProducts,
+  onSelect,
+  onDetails,
+}: {
+  allProducts: { product: Product; rec: any }[];
+  onSelect: (name: string) => void;
+  onDetails: (product: Product) => void;
+}) => {
+  return (
+    <div className="flex flex-1 flex-col h-full bg-[#FAFAFA] overflow-hidden">
+      <div className="px-6 py-4 border-b border-[#E0E0E0] bg-white flex-shrink-0">
+        <h2 className="text-xs font-bold uppercase tracking-widest text-[#767676]">Gallery</h2>
+        {allProducts.length > 0 && (
+          <p className="text-xs text-[#AAAAAA] mt-0.5">
+            {allProducts.length} item{allProducts.length !== 1 ? 's' : ''} recommended
+          </p>
+        )}
+      </div>
+
+      <div className="flex-1 overflow-y-auto p-6">
+        {allProducts.length === 0 ? (
+          <div className="h-full flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-[#F0F0F0] rounded-full mx-auto mb-4 flex items-center justify-center">
+                <Sparkles size={24} className="text-[#CCCCCC]" />
+              </div>
+              <p className="text-sm font-medium text-[#999999]">Your selections will appear here</p>
+              <p className="text-xs text-[#BBBBBB] mt-1">Start a conversation to discover furniture</p>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-4">
+            <AnimatePresence>
+              {allProducts.map(({ product, rec }) => (
+                <GalleryCard
+                  key={product.product_id}
+                  product={product}
+                  recommendation={rec}
+                  onSelect={onSelect}
+                  onDetails={onDetails}
+                />
+              ))}
+            </AnimatePresence>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const AssistantReply = ({
+  message,
+  onSelectProduct,
+  onViewDetails
+}: {
+  message: Message;
   onSelectProduct: (name: string) => void;
   onViewDetails: (product: Product) => void;
   key?: React.Key;
 }) => {
   return (
-    <div className="flex flex-col w-full mb-6">
+    <div className="flex flex-col w-full mb-4">
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex justify-start mb-4"
+        className="flex justify-start mb-3"
       >
-        <div className="max-w-[85%] p-4 rounded-2xl bg-[#E8F4F8] text-[#1A1A1A] rounded-tl-none text-sm leading-relaxed shadow-sm">
+        <div className="max-w-[85%] px-4 py-3 bg-white border border-[#E0E0E0] text-[#111111] rounded text-sm leading-relaxed">
           {message.content}
         </div>
       </motion.div>
 
+      {/* Products — shown inline on mobile, hidden on desktop (shown in gallery instead) */}
       {message.products && message.products.length > 0 && (
-        <div className="w-full overflow-x-auto no-scrollbar py-2 -mx-4 px-4 flex snap-x">
+        <div className="md:hidden w-full overflow-x-auto no-scrollbar py-2 -mx-4 px-4 flex snap-x">
           {message.products.map((rec) => {
             const product = catalogData.find(p => p.product_id === rec.product_id);
             if (!product) return null;
             return (
-              <ProductCard 
-                key={product.product_id} 
-                product={product as Product} 
-                recommendation={rec} 
+              <ProductCard
+                key={product.product_id}
+                product={product as Product}
+                recommendation={rec}
                 onSelect={onSelectProduct}
                 onDetails={onViewDetails}
               />
@@ -289,8 +411,6 @@ const AssistantReply = ({
           <div className="flex-shrink-0 w-4" />
         </div>
       )}
-      
-      {/* Future AR slot could go here */}
     </div>
   );
 };
@@ -328,7 +448,6 @@ export default function App() {
 
   useEffect(() => {
     if (scrollRef.current) {
-      // Use a small delay to ensure content is rendered before scrolling
       setTimeout(() => {
         scrollRef.current?.scrollTo({
           top: scrollRef.current.scrollHeight,
@@ -337,6 +456,17 @@ export default function App() {
       }, 100);
     }
   }, [state.history, isTyping, state.products_shown]);
+
+  // Derive all products from history for the desktop gallery
+  const allGalleryProducts = state.history
+    .filter(m => m.products?.length)
+    .flatMap(m =>
+      (m.products ?? []).map(rec => {
+        const product = catalogData.find(p => p.product_id === rec.product_id) as Product | undefined;
+        return product ? { product, rec } : null;
+      })
+    )
+    .filter((x): x is { product: Product; rec: any } => x !== null);
 
   const handleSend = async (overrideInput?: string) => {
     const textToSend = overrideInput || input;
@@ -362,7 +492,7 @@ export default function App() {
       });
 
       const extractedContext = JSON.parse(extractionResponse.text || '{}');
-      
+
       // Merge context
       const updatedContext = {
         ...state.context,
@@ -386,10 +516,8 @@ export default function App() {
 
       // Handle "you decide"
       if (extractedContext.user_said_you_decide && updatedContext.intent && updatedContext.aesthetic.length > 0) {
-        // If they say "you decide", we can jump to specific if we have enough info
         if (!updatedContext.budget.max) {
-           // Maybe suggest a budget? The prompt says "Make a decision based on what you know"
-           // For now, let's let the assistant handle the text response.
+          // Let the assistant handle the text response
         }
       }
 
@@ -421,7 +549,7 @@ export default function App() {
       });
 
       let rawContent = response.text || "I'm sorry, I didn't quite catch that. Could you say it again?";
-      
+
       // Parse Quick Replies: [Option 1 | Option 2]
       let quickReplies: string[] = [];
       const qrMatch = rawContent.match(/\[(.*?)\]/);
@@ -459,69 +587,132 @@ export default function App() {
     }
   };
 
+  const lastMessage = state.history[state.history.length - 1];
+  const showQuickReplies = lastMessage?.role === 'assistant' && lastMessage?.quickReplies;
+
   return (
-    <div className="flex flex-col h-screen bg-white font-sans text-[#1A1A1A] overflow-hidden">
-      {/* Header */}
-      <header className="flex items-center justify-between px-6 py-4 border-bottom border-[#E0E0E0] bg-white z-10">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-[#2D5B7B] rounded-lg flex items-center justify-center text-white">
-            <Sparkles size={18} />
-          </div>
-          <div>
-            <h1 className="text-lg font-semibold tracking-tight">Lumi</h1>
-            <p className="text-[10px] uppercase tracking-widest text-[#666] font-medium">
-              {state.stage} stage
-            </p>
-          </div>
-        </div>
-        <button className="p-2 text-[#666] hover:bg-[#F0F0F0] rounded-full transition-colors">
-          <Info size={20} />
-        </button>
-      </header>
+    <div className="flex h-screen bg-white overflow-hidden">
+      {/* Left gallery panel — desktop only */}
+      <div className="hidden md:flex flex-1 flex-col border-r border-[#E0E0E0] min-w-0">
+        <GalleryPanel
+          allProducts={allGalleryProducts}
+          onSelect={(name) => handleSend(`I'd like to select the ${name}`)}
+          onDetails={(p) => setSelectedProduct(p)}
+        />
+      </div>
 
-      {/* Chat Area */}
-      <main 
-        ref={scrollRef}
-        className="flex-1 overflow-y-auto px-4 py-6 space-y-4 scroll-smooth"
-      >
-        <AnimatePresence initial={false}>
-          {state.history.map((msg, i) => (
-            msg.role === 'assistant' ? (
-              <AssistantReply 
-                key={i} 
-                message={msg} 
-                onSelectProduct={(name) => handleSend(`I'd like to select the ${name}`)}
-                onViewDetails={(p) => setSelectedProduct(p)}
-              />
-            ) : (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="flex justify-end mb-4"
-              >
-                <div className="max-w-[75%] p-4 rounded-2xl bg-[#F0F0F0] text-[#1A1A1A] rounded-tr-none text-sm leading-relaxed shadow-sm">
-                  {msg.content}
-                </div>
-              </motion.div>
-            )
-          ))}
-        </AnimatePresence>
-
-        {isTyping && (
-          <motion.div
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex justify-start mb-4"
-          >
-            <div className="bg-[#E8F4F8] p-4 rounded-2xl rounded-tl-none flex gap-1">
-              <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1 }} className="w-1.5 h-1.5 bg-[#2D5B7B] rounded-full" />
-              <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: 0.2 }} className="w-1.5 h-1.5 bg-[#2D5B7B] rounded-full" />
-              <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: 0.4 }} className="w-1.5 h-1.5 bg-[#2D5B7B] rounded-full" />
+      {/* Right chat column — full width on mobile, fixed width on desktop */}
+      <div className="flex flex-col w-full md:w-[440px] md:flex-shrink-0 h-screen overflow-hidden bg-white">
+        {/* Header */}
+        <header className="flex items-center justify-between px-4 py-3 bg-white border-b border-[#E0E0E0] flex-shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-[#0058A3] flex items-center justify-center flex-shrink-0">
+              <Sparkles size={16} className="text-white" />
             </div>
-          </motion.div>
+            <div>
+              <h1 className="text-base font-bold tracking-tight text-[#111111] leading-none">Lumi</h1>
+              <p className="text-[10px] uppercase tracking-widest text-[#767676] font-medium mt-0.5">
+                {state.stage} stage
+              </p>
+            </div>
+          </div>
+          <button className="p-2 text-[#767676] hover:text-[#111111] hover:bg-[#F5F5F5] transition-colors rounded">
+            <Info size={18} />
+          </button>
+        </header>
+
+        {/* Chat area */}
+        <main
+          ref={scrollRef}
+          className="flex-1 overflow-y-auto px-4 py-5 bg-[#FAFAFA] scroll-smooth"
+        >
+          <AnimatePresence initial={false}>
+            {state.history.map((msg, i) =>
+              msg.role === 'assistant' ? (
+                <AssistantReply
+                  key={i}
+                  message={msg}
+                  onSelectProduct={(name) => handleSend(`I'd like to select the ${name}`)}
+                  onViewDetails={(p) => setSelectedProduct(p)}
+                />
+              ) : (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: 8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="flex justify-end mb-4"
+                >
+                  <div className="max-w-[75%] px-4 py-3 bg-[#EBEBEB] text-[#111111] rounded text-sm leading-relaxed">
+                    {msg.content}
+                  </div>
+                </motion.div>
+              )
+            )}
+          </AnimatePresence>
+
+          {isTyping && (
+            <motion.div
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex justify-start mb-4"
+            >
+              <div className="bg-white border border-[#E0E0E0] px-4 py-3 rounded flex gap-1.5">
+                <motion.div
+                  animate={{ opacity: [0.3, 1, 0.3] }}
+                  transition={{ repeat: Infinity, duration: 1 }}
+                  className="w-1.5 h-1.5 bg-[#767676] rounded-full"
+                />
+                <motion.div
+                  animate={{ opacity: [0.3, 1, 0.3] }}
+                  transition={{ repeat: Infinity, duration: 1, delay: 0.2 }}
+                  className="w-1.5 h-1.5 bg-[#767676] rounded-full"
+                />
+                <motion.div
+                  animate={{ opacity: [0.3, 1, 0.3] }}
+                  transition={{ repeat: Infinity, duration: 1, delay: 0.4 }}
+                  className="w-1.5 h-1.5 bg-[#767676] rounded-full"
+                />
+              </div>
+            </motion.div>
+          )}
+        </main>
+
+        {/* Quick replies */}
+        {showQuickReplies && (
+          <QuickReplies
+            options={lastMessage.quickReplies!}
+            onSelect={(option) => handleSend(option)}
+          />
         )}
-      </main>
+
+        {/* Input area */}
+        <footer className="px-4 py-3 bg-white border-t border-[#E0E0E0] flex-shrink-0">
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+              placeholder="Describe your dream space..."
+              className="flex-1 h-11 px-4 bg-[#F5F5F5] border border-transparent text-sm text-[#111111] placeholder:text-[#AAAAAA] focus:border-[#0058A3] focus:bg-white focus:outline-none transition-all rounded"
+            />
+            <button
+              onClick={() => handleSend()}
+              disabled={!input.trim() || isTyping}
+              className={`w-11 h-11 flex items-center justify-center transition-colors flex-shrink-0 rounded ${
+                input.trim() && !isTyping
+                  ? 'bg-[#0058A3] text-white hover:bg-[#004F99]'
+                  : 'bg-[#E0E0E0] text-[#AAAAAA] cursor-not-allowed'
+              }`}
+            >
+              <Send size={16} />
+            </button>
+          </div>
+          <p className="text-[10px] text-center text-[#BBBBBB] mt-2 uppercase tracking-widest font-medium">
+            Powered by Gemini
+          </p>
+        </footer>
+      </div>
 
       {/* Product Details Modal */}
       <AnimatePresence>
@@ -530,56 +721,57 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 z-50 flex items-end sm:items-center justify-center p-4"
+            className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center p-4"
             onClick={() => setSelectedProduct(null)}
           >
             <motion.div
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
-              className="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl"
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="bg-white w-full max-w-lg overflow-hidden shadow-2xl rounded"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="relative h-64 sm:h-80">
-                <img 
-                  src={selectedProduct.image_url} 
+              <div className="relative h-64 sm:h-72">
+                <img
+                  src={selectedProduct.image_url}
                   alt={selectedProduct.name}
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
                 />
-                <button 
+                <button
                   onClick={() => setSelectedProduct(null)}
-                  className="absolute top-4 right-4 w-8 h-8 bg-black/20 backdrop-blur-md text-white rounded-full flex items-center justify-center hover:bg-black/40 transition-colors"
+                  className="absolute top-3 right-3 w-8 h-8 bg-white/90 text-[#111111] flex items-center justify-center hover:bg-white transition-colors shadow-sm"
                 >
-                  ✕
+                  <X size={16} />
                 </button>
               </div>
               <div className="p-6">
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h2 className="text-2xl font-bold text-[#1A1A1A]">{selectedProduct.name}</h2>
-                    <p className="text-[#666] text-sm uppercase tracking-wider">{selectedProduct.category}</p>
+                    <h2 className="text-xl font-bold text-[#111111] leading-tight">{selectedProduct.name}</h2>
+                    <p className="text-xs text-[#767676] uppercase tracking-wider mt-1">{selectedProduct.category}</p>
                   </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-[#2D5B7B]">${selectedProduct.price}</p>
-                    <div className="flex items-center justify-end gap-1 text-amber-500">
-                      <Star size={14} fill="currentColor" />
-                      <span className="text-sm font-semibold">{selectedProduct.rating}</span>
+                  <div className="text-right ml-4 flex-shrink-0">
+                    <p className="text-xl font-bold text-[#0058A3]">${selectedProduct.price}</p>
+                    <div className="flex items-center justify-end gap-1 mt-0.5">
+                      <Star size={12} fill="currentColor" className="text-[#FFDB00]" />
+                      <span className="text-sm text-[#767676] font-medium">{selectedProduct.rating}</span>
                     </div>
                   </div>
                 </div>
-                
-                <div className="space-y-4 mb-8">
+
+                <div className="space-y-4 mb-6">
                   <div>
-                    <h4 className="text-xs font-bold uppercase text-[#999] tracking-widest mb-2">Description</h4>
-                    <p className="text-sm text-[#444] leading-relaxed">{selectedProduct.user_friendly_description}</p>
+                    <h4 className="text-[10px] font-bold uppercase text-[#999999] tracking-widest mb-2">Description</h4>
+                    <p className="text-sm text-[#444444] leading-relaxed">{selectedProduct.user_friendly_description}</p>
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold uppercase text-[#999] tracking-widest mb-2">Key Features</h4>
-                    <ul className="grid grid-cols-1 gap-2">
+                    <h4 className="text-[10px] font-bold uppercase text-[#999999] tracking-widest mb-2">Key Features</h4>
+                    <ul className="grid grid-cols-1 gap-1.5">
                       {selectedProduct.key_features.map((f, i) => (
-                        <li key={i} className="text-sm text-[#444] flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 bg-[#D4A574] rounded-full" />
+                        <li key={i} className="text-sm text-[#444444] flex items-center gap-2">
+                          <div className="w-1 h-1 bg-[#0058A3] rounded-full flex-shrink-0" />
                           {f}
                         </li>
                       ))}
@@ -592,7 +784,7 @@ export default function App() {
                     handleSend(`I've decided on the ${selectedProduct.name}!`);
                     setSelectedProduct(null);
                   }}
-                  className="w-full py-4 bg-[#2D5B7B] text-white rounded-2xl font-bold hover:bg-[#1E3D51] transition-colors shadow-lg"
+                  className="w-full py-3.5 bg-[#0058A3] text-white font-bold hover:bg-[#004F99] transition-colors text-sm uppercase tracking-wider rounded"
                 >
                   Select This Product
                 </button>
@@ -602,50 +794,9 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* Quick Replies Modal-like Extension */}
-      {state.history[state.history.length - 1]?.role === 'assistant' && state.history[state.history.length - 1]?.quickReplies && (
-        <QuickReplies 
-          options={state.history[state.history.length - 1].quickReplies!} 
-          onSelect={(option) => handleSend(option)} 
-        />
-      )}
-
-      {/* Input Area */}
-      <footer className="p-4 bg-white border-t border-[#E0E0E0]">
-        <div className="max-w-3xl mx-auto flex items-center gap-3">
-          <div className="flex-1 relative">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              placeholder="Describe your dream space..."
-              className="w-full h-12 pl-4 pr-12 bg-[#F0F0F0] border-none rounded-2xl text-sm focus:ring-2 focus:ring-[#2D5B7B]/20 focus:outline-none transition-all"
-            />
-            <button
-              onClick={handleSend}
-              disabled={!input.trim() || isTyping}
-              className={`absolute right-1.5 top-1.5 w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
-                input.trim() && !isTyping ? 'bg-[#2D5B7B] text-white' : 'bg-[#E0E0E0] text-[#666]'
-              }`}
-            >
-              <Send size={18} />
-            </button>
-          </div>
-        </div>
-        <p className="text-[10px] text-center text-[#999] mt-3 uppercase tracking-widest font-medium">
-          Powered by Gemini 2.0 Flash
-        </p>
-      </footer>
-
       <style>{`
-        .no-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .no-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
     </div>
   );
